@@ -1,0 +1,145 @@
+#this code repalce '=if(countif([查找范围],查找的那一个条件)=0."不存在","存在")' in excel
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+#import packges
+import os
+#setwd
+os.chdir("D:\\calendar_chen\\2017miRNA_GWAS")
+
+# open input file
+seeds_SNP = open('polumiRTS_SNPs_and_indels_in_miRNA_seeds_human.txt')
+experimentally_supported_SNP = open('PolymiRT_experimentally_supported_miRSNP_human.txt')
+CLASH_supported_SNP = open('PolymiRT_target_miRSNP_human_CLASH.txt')
+target_miRSNP = open('PolymiRT_target_miRSNP_human.txt')
+eQTL_SNP_CRBL = open('PolymiRTS_cis_h_cerebellum_20485568.txt')
+eQTL_SNP_COTX = open('PolymiRTS_cis_h_cortical_17982457.txt')
+eQTL_SNP_FTCX = open('PolymiRTS_cis_h_frontal_cortex_20485568.txt')
+eQTL_SNP_TPCX = open('PolymiRTS_cis_h_temporal_cortex_20485568.txt')
+GWAS_SNP = open('108GWAS_SNP.txt')
+
+# open output file
+o = open('BSNIP_results_for_Chunyu_ensembl_eQTL.txt','w')
+
+#overlap
+allsnp = []
+seeds = []
+experimentally_supported = []
+CLASH_supported = []
+target = []
+GWAS = []
+eQTLsnp = []
+
+#х┌м╗лл
+o.write("allsnp\tseed\texperimentally_supported\tCLASH_supported\ttarget_miRSNP\tGWAS_SNP\teQTLsnp\n")
+
+while 1:
+  l = seeds_SNP.readline()
+  if not l:
+        break
+  s1 = l.split("\t")
+  seeds.append(s1[4])
+  allsnp.append(s1[4])
+
+
+while 1:
+    l = experimentally_supported_SNP.readline()
+    if not l:
+        break
+    s1 = l.split("\t")
+    #print(len(s1))
+    experimentally_supported.append(s1[2])
+    allsnp.append(s1[2])
+
+
+while 1:
+    l = CLASH_supported_SNP.readline()
+    if not l:
+        break
+    s1 = l.split("\t")
+    CLASH_supported.append(s1[6])
+    allsnp.append(s1[6])
+
+
+while 1:
+    l = target_miRSNP.readline()
+    if not l:
+        break
+    s1 = l.split("\t")
+    target.append(s1[2])
+    allsnp.append(s1[2])
+
+
+while 1:
+    l = GWAS_SNP.readline()
+    if not l:
+        break
+    s1 = l.split("\n")
+    GWAS.append(s1[0])
+#    allsnp.append(s1[0])
+#    print(GWAS)
+
+while 1:
+    l = eQTL_SNP_CRBL.readline()
+    if not l:
+        break
+    s1 = l.split("\t")
+    eQTLsnp.append(s1[2])
+    allsnp.append(s1[2])
+
+while 1:
+    l = eQTL_SNP_FTCX.readline()
+    if not l:
+        break
+    s1 = l.split("\t")
+    eQTLsnp.append(s1[2])
+    allsnp.append(s1[2])
+
+while 1:
+    l = eQTL_SNP_TPCX.readline()
+    if not l:
+        break
+    s1 = l.split("\t")
+    eQTLsnp.append(s1[2])
+    allsnp.append(s1[2])
+
+while 1:
+    l = eQTL_SNP_COTX.readline()
+    if not l:
+        break
+    s1 = l.split("\t")
+    eQTLsnp.append(s1[2])
+    allsnp.append(s1[2])
+
+allsnp = set(allsnp)
+#print(allsnp)
+eQTLsnp = set(eQTLsnp)
+
+for n in allsnp:
+    o.write("%s\t"%n)
+    if n in seeds:
+        o.write("yes\t")
+    else:
+        o.write("no\t")
+    if n in experimentally_supported:
+        o.write("yes\t")
+    else:
+        o.write("no\t")
+    if n in CLASH_supported:
+        o.write("yes\t")
+    else:
+        o.write("no\t")
+    if n in target:
+        o.write("yes\t")
+    else:
+        o.write("no\t")
+
+    if n in GWAS_SNP:
+        o.write("yes\t")
+    else:
+        o.write("no\t")
+
+    if n in eQTLsnp:
+        o.write("yes\n")
+    else:
+        o.write("no\n")
